@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane prefHeight="800.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainPage">
+   <children>
+      <Button layoutX="179.0" layoutY="76.0" mnemonicParsing="false" onAction="#ErrAlertOK" text="ErrAlertOK" />
+      <Button layoutX="179.0" layoutY="106.0" mnemonicParsing="false" onAction="#ErrAlertConfirm" text="ErrAlertConfirm" />
+   </children>
+</AnchorPane>
