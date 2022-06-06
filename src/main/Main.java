@@ -23,12 +23,13 @@ public class Main extends Application{
 
     public static void main(String[] args) throws SQLException {
         JDBC.openConnection();
+        //Locale.setDefault(Locale.FRANCE);
         launch();
-        // for testing purposes
-        //Locale.setDefault(new Locale("fr"));
+
+
         ObservableList<Country> e = Query.getAllCountries();
         for (Country c : e) {
-            System.out.format("ID : %d \n Name: %s \n", c.getId(), c.getName());
+            System.out.format("ID : %d \nName: %s \n\n", c.getId(), c.getName());
         }
 
         JDBC.closeConnection();

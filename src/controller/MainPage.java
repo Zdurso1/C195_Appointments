@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 
 import java.awt.*;
 import java.net.URL;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class MainPage implements Initializable {
@@ -45,12 +46,31 @@ public class MainPage implements Initializable {
     public Button loginButton;
 
     /**
+     * Label to display user's Locale
+     */
+    public Label LocaleLable;
+
+    /**
      * This is or will be used to get locale and translate labels and whatnot.
      * @param url url
      * @param resourceBundle resource bundle
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        ResourceBundle rb = ResourceBundle.getBundle("resources/MessageBundle",Locale.getDefault());
+        System.out.println(Locale.getDefault());
+        System.out.println(rb.getString("confirmDelete"));
+
+        LocaleLable.setText(Locale.getDefault().getDisplayCountry());
+        usernameLabel.setText(rb.getString("username"));
+        usernameInput.setPromptText(rb.getString("username"));
+        passwordLabel.setText(rb.getString("password"));
+        passwordInput.setPromptText(rb.getString("password"));
+        LoginLabel.setText(rb.getString("login"));
+        loginButton.setText(rb.getString("login"));
+
+
 
     }
 
