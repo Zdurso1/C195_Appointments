@@ -2,10 +2,12 @@ package main;
 import helper.JDBC;
 import helper.Query;
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.Country;
 
 import java.sql.SQLException;
 import java.util.Locale;
@@ -24,7 +26,11 @@ public class Main extends Application{
         launch();
         // for testing purposes
         //Locale.setDefault(new Locale("fr"));
-        Query.select();
+        ObservableList<Country> e = Query.getAllCountries();
+        for (Country c : e) {
+            System.out.format("ID : %d \n Name: %s \n", c.getId(), c.getName());
+        }
+
         JDBC.closeConnection();
     }
 }
