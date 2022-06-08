@@ -22,7 +22,7 @@ public class User {
      * @param name User Name
      * @param password User Password
      */
-    User (int id, String name, String password) {
+    public User(int id, String name, String password) {
         this.id=id;
         this.name=name;
         this.password=password;

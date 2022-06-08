@@ -15,9 +15,9 @@
          <font>
             <Font name="System Bold" size="24.0" />
          </font></Label>
-      <Label fx:id="usernameLabel" layoutX="74.0" layoutY="104.0" text="Username" />
+      <Label fx:id="usernameLabel" layoutX="74.0" layoutY="104.0" text="User ID" />
       <Label fx:id="passwordLabel" layoutX="74.0" layoutY="164.0" text="Password" />
-      <TextField fx:id="usernameInput" layoutX="209.0" layoutY="100.0" promptText="Username" />
+      <TextField fx:id="usernameInput" layoutX="209.0" layoutY="100.0" promptText="User ID" />
       <PasswordField fx:id="passwordInput" layoutX="209.0" layoutY="160.0" promptText="Password" />
       <Button fx:id="loginButton" layoutX="209.0" layoutY="220.0" mnemonicParsing="false" onAction="#login" text="Log In" />
    </children>
