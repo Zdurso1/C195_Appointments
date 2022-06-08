@@ -1,6 +1,7 @@
 package controller;
 
 import helper.Err;
+import helper.LoadPage;
 import helper.Query;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,7 +19,7 @@ import java.sql.SQLException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class MainPage implements Initializable {
+public class MainPageController implements Initializable {
     /**
      * Label for Log In Page.
      */
@@ -104,7 +105,7 @@ public class MainPage implements Initializable {
         if (success = false) {
             Err.alertOk(rb.getString("loginUnsuccessful"));
         } else {
-            System.out.println("good 4 U");
+            LoadPage.toDashboard(loginButton);
         }
 
 
