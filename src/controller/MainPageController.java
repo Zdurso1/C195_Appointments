@@ -109,7 +109,7 @@ public class MainPageController implements Initializable {
             Err.alertOk(rb.getString("loginUnsuccessful"));
         }
 
-        if (success = false) {
+        if (!success) {
             Err.alertOk(rb.getString("loginUnsuccessful"));
         } else {
             LoadPage.toDashboard(loginButton);

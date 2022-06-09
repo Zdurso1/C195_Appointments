@@ -2,10 +2,7 @@ package helper;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import model.Appointment;
-import model.Country;
-import model.Customer;
-import model.User;
+import model.*;
 
 import java.sql.*;
 import java.time.format.DateTimeFormatter;
@@ -178,6 +175,7 @@ public abstract class Query {
         }
     }
 
+    /*
     public static void createAppointment() {
         try {
             // Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By
@@ -206,6 +204,32 @@ public abstract class Query {
         }catch(SQLException e) {
             e.printStackTrace();
         }
+    }
+    */
+
+
+    public static ObservableList<FirstLevelDivision> getAllDivisions() {
+        ObservableList<FirstLevelDivision> allDivisions = FXCollections.observableArrayList();
+
+        try {
+            String sql = "select * from first_level_divisions";
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("Division_ID");
+                String name = rs.getString("Division");
+                int countryID = rs.getInt("Country_ID");
+                FirstLevelDivision d = new FirstLevelDivision(id,name,countryID);
+
+                allDivisions.add(d);
+            }
+        }catch(SQLException e) {
+            e.printStackTrace();
+        }
+
+        return allDivisions;
     }
 
 

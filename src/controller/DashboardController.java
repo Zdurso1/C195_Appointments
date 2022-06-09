@@ -1,6 +1,7 @@
 package controller;
 
 import helper.Err;
+import helper.LoadPage;
 import helper.Query;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -102,6 +103,7 @@ public class DashboardController implements Initializable {
     }
 
     public void addCustomer(ActionEvent actionEvent) {
+        LoadPage.toOther(customerAddBTN, "AddCustomer");
     }
 
     public void updateCustomer(ActionEvent actionEvent) {
