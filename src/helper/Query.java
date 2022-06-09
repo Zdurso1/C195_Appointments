@@ -7,12 +7,13 @@ import model.Country;
 import model.Customer;
 import model.User;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
+import java.time.format.DateTimeFormatter;
 
 public abstract class Query {
+
+    private static int currentUserID;
+    public int getCurrentUserID() {return currentUserID;}
 
     public static ObservableList<Country> getAllCountries() throws SQLException {
 
@@ -77,6 +78,7 @@ public abstract class Query {
                 int userID = rs.getInt("User_ID");
 
                 if (password.equals(pwd)) {
+                    currentUserID = userID;
                     success = true;
                     System.out.println(password + " " + userID);
                 }
@@ -143,8 +145,12 @@ public abstract class Query {
                 int userID = rs.getInt("User_ID");
                 int contactID = rs.getInt("Contact_ID");
 
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-                Appointment a = new Appointment(id,title,description,location,type,start.toLocalDateTime(),end.toLocalDateTime(),customerID,userID,contactID);
+                String formattedStart = start.toLocalDateTime().format(formatter);
+                String formattedEnd = end.toLocalDateTime().format(formatter);
+
+                Appointment a = new Appointment(id,title,description,location,type,formattedStart,formattedEnd,customerID,userID,contactID);
 
                 allAppointments.add(a);
             }
@@ -154,5 +160,53 @@ public abstract class Query {
 
         return allAppointments;
     }
+
+    public static void deleteAppointment(int appointmentID) {
+        try {
+            String sql = "DELETE FROM appointments WHERE Appointment_ID = " + appointmentID;
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+
+            ps.executeUpdate(sql);
+
+
+            String message = "Appointment " + appointmentID + " Has been Deleted";
+            System.out.println(message);
+            Err.alertOk(message);
+
+        }catch(SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void createAppointment() {
+        try {
+            // Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By
+            String sql = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By) VALUES (?,?,?,?,?,?,?,?,?,?)";
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+
+            ps.setString(1, );
+            ps.setString(2, );
+            ps.setString(3, );
+            ps.setString(4, );
+            ps.setString(5, );
+            ps.setString(6, );
+            ps.setString(7, );
+            ps.setString(8, );
+            ps.setString(9, );
+            ps.setString(10, );
+
+
+            ps.executeUpdate(sql);
+
+
+            String message = "Appointment has been Created!";
+            System.out.println(message);
+            Err.alertOk(message);
+
+        }catch(SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

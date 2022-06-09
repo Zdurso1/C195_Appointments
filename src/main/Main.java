@@ -13,7 +13,7 @@ public class Main extends Application{
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/view/MainPage.fxml"));
         stage.setTitle("Main Screen");
-        stage.setScene(new Scene(root, 850, 650));
+        stage.setScene(new Scene(root, 950, 600));
         stage.show();
     }
 

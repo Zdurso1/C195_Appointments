@@ -56,6 +56,12 @@ public class MainPageController implements Initializable {
     public Label LocaleLable;
 
     /**
+     * Current User ID
+     */
+    int currentUserID;
+
+
+    /**
      * This is used to get locale and translate labels and whatnot.
      * @param url url
      * @param resourceBundle resource bundle
@@ -92,6 +98,7 @@ public class MainPageController implements Initializable {
         try {
             int id = Integer.parseInt(usernameInput.getText());
             String pwd = passwordInput.getText();
+            currentUserID = id;
             success = Query.login(id, pwd);
 
         } catch (IllegalArgumentException e) {

@@ -31,12 +31,12 @@ public class Appointment {
     /**
      * Appointment start Date and Time
      */
-    private LocalDateTime start;
+    private String start;
 
     /**
      * Appointment end Date and "Time
      */
-    private LocalDateTime end;
+    private String end;
 
     /**
      * Appointment's Customer ID
@@ -66,7 +66,7 @@ public class Appointment {
      * @param userID User ID
      * @param contactID Contact ID
      */
-    public Appointment(int id, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, int customerID, int userID, int contactID) {
+    public Appointment(int id, String title, String description, String location, String type, String start, String end, int customerID, int userID, int contactID) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -163,7 +163,7 @@ public class Appointment {
      * Getter for Appointment Start Date and Time
      * @return Start Date and Time
      */
-    public LocalDateTime getStart() {
+    public String getStart() {
         return start;
     }
 
@@ -171,7 +171,7 @@ public class Appointment {
      * Setter for Appointment Start Date and Time
      * @param start Start Date and Time
      */
-    public void setStart(LocalDateTime start) {
+    public void setStart(String start) {
         this.start = start;
     }
 
@@ -179,7 +179,7 @@ public class Appointment {
      * Getter for Appointment End Date and Time
      * @return End Date and Time
      */
-    public LocalDateTime getEnd() {
+    public String getEnd() {
         return end;
     }
 
@@ -187,7 +187,7 @@ public class Appointment {
      * Setter for Appointment End Date and Time
      * @param end End Date and Time
      */
-    public void setEnd(LocalDateTime end) {
+    public void setEnd(String end) {
         this.end = end;
     }
 

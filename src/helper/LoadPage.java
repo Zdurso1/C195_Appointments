@@ -13,8 +13,26 @@ public abstract class LoadPage {
         try {
             Parent root = FXMLLoader.load(MainPageController.class.getResource("/view/Dashboard.fxml"));
             Stage stage = (Stage) (btn).getScene().getWindow();
-            Scene scene = new Scene(root, 900, 600);
+            Scene scene = new Scene(root, 950, 600);
             stage.setTitle("Dashboard");
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            e.getCause();
+            e.getMessage();
+
+        }
+    }
+
+    public static void toOther(Button btn, String pathString) {
+        String path = "/view/"+pathString+".fxml";
+
+        try {
+            Parent root = FXMLLoader.load(MainPageController.class.getResource(path));
+            Stage stage = (Stage) (btn).getScene().getWindow();
+            Scene scene = new Scene(root, 950, 600);
+            stage.setTitle(pathString);
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
