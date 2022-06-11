@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 public abstract class Query {
 
     private static int currentUserID;
-    public int getCurrentUserID() {return currentUserID;}
+    public static int getCurrentUserID() {return currentUserID;}
 
     public static ObservableList<Country> getAllCountries() throws SQLException {
 
@@ -80,10 +80,6 @@ public abstract class Query {
                     System.out.println(password + " " + userID);
                 }
             }
-
-            //System.out.println(rs.getString("User_Name") + " " + rs.getString("Password"));
-
-
 
             System.out.println(ps);
         } catch (SQLException e) {
@@ -179,7 +175,7 @@ public abstract class Query {
     public static void createAppointment() {
         try {
             // Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By
-            String sql = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By) VALUES (?,?,?,?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO appointments VALUES (?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
 
             ps.setString(1, );
@@ -232,5 +228,61 @@ public abstract class Query {
         return allDivisions;
     }
 
+    public static int addCustomer(String name, String address, String postalCode, String phone, int divisionID) throws SQLException {
+        // Customer_ID, Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, Last_Update, Last_Updated_By, Division_ID
+        // name, address, postalCode, phone, divisionID
+        try {
+            int userID = getCurrentUserID();
+            String sql = "INSERT INTO customers VALUES (NULL,'" +name+ "','" +address+ "','" +postalCode+ "','"+phone+"',CURRENT_TIMESTAMP()," + userID + ",NOW()," + userID + "," + divisionID + ")";
+
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+
+            int rs = ps.executeUpdate(sql);
+
+            if (rs == 1) {
+                return rs;
+            }else {
+                Err.alertOk("Whoopsie Daisies, Something Happened!");
+                return 123456789;
+            }
+
+        } catch (SQLException s) {
+            s.printStackTrace();
+        }
+        return 99;
+    }
+
+
+
+    public static int deleteCustomer (int customerID) {
+        int result = 0;
+        try {
+            String sql = "DELETE FROM customers WHERE Customer_ID = " + customerID;
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+
+            result = ps.executeUpdate(sql);
+
+        }catch(SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public static int updateCustomer (int customerID, String customerName, String customerAddress, String customerPostalCode, String customerPhone, int division) throws SQLException {
+        int rowsAffected = 0;
+        String sql = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Division_ID = ? WHERE Customer_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setString(1, customerName);
+        ps.setString(2, customerAddress);
+        ps.setString(3, customerPostalCode);
+        ps.setString(4, customerPhone);
+        ps.setInt(5, division);
+        ps.setInt(6, customerID);
+
+        rowsAffected = ps.executeUpdate();
+
+        return rowsAffected;
+    }
 
 }

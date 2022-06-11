@@ -1,11 +1,14 @@
 package controller;
 
+import helper.Err;
+import helper.LoadPage;
 import helper.Query;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import model.Country;
@@ -67,19 +70,52 @@ public class AddCustomerController implements Initializable {
         });
 
 
-        //customerFirstLevelDivisionInput.setItems(relevantDivisions);
-
-
-
         FirstLevelDivision customerDivision = (FirstLevelDivision) customerFirstLevelDivisionInput.getValue();
 
 
     }
 
-    public void saveNewCustomer(ActionEvent actionEvent) {
+    // had a class cast exception here for FirstLevelDivision
+    public void saveNewCustomer(ActionEvent actionEvent) throws SQLException {
+        System.out.println(customerFirstLevelDivisionInput.getSelectionModel().getSelectedItem());
+        Object CFD = customerFirstLevelDivisionInput.getSelectionModel().getSelectedItem();
+
+        int customerDivisionID = 999999999;
+        System.out.println(customerDivisionID);
+
+        for (FirstLevelDivision F : Query.getAllDivisions()) {
+            if (F.getDivision().equals(CFD)) {
+                customerDivisionID = F.getId();
+                System.out.println(F.getId());
+            }
+        }
+
+
+        // name, address, postalCode, phone, divisionID
+        String name = customerNameInput.getText();
+        String address = customerAddressInput.getText();
+        String postalCode = customerPostalCodeInput.getText();
+        String phone = customerPhoneNumberInput.getText();
+        int divID = customerDivisionID;
+        System.out.println(divID);
+
+
+        try {
+            int success = Query.addCustomer(name, address, postalCode, phone, divID);
+            if (success == 1) {
+                Err.alertConfirm("Customer Created Successfully");
+                LoadPage.toDashboard(addCustomerCancelBTN);
+            }
+        } catch (SQLException s) {
+            s.printStackTrace();
+        }
     }
 
     public void cancelNewCustomer(ActionEvent actionEvent) {
+        ButtonType B = Err.alertConfirm("Input will be discarded. Return to Dashboard?");
+        if (B == ButtonType.YES) {
+            LoadPage.toDashboard(addCustomerCancelBTN);
+        }
     }
 
 

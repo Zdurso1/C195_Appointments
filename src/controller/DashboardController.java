@@ -15,6 +15,7 @@ import model.Customer;
 import model.User;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class DashboardController implements Initializable {
@@ -107,8 +108,47 @@ public class DashboardController implements Initializable {
     }
 
     public void updateCustomer(ActionEvent actionEvent) {
+        customerTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        Customer c = customerTable.getSelectionModel().getSelectedItem();
+        C = c;
+
+        LoadPage.toOther(customerUpdateBTN, "UpdateCustomer");
+
     }
 
     public void deleteCustomer(ActionEvent actionEvent) {
+
+        customerTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        Customer C = customerTable.getSelectionModel().getSelectedItem();
+        int customerID = C.getId();
+        int appointmentCount = 0;
+
+        for (Appointment A : allAppointments) {
+            if (A.getCustomerID() == customerID) {
+                Err.alertOk(C.getName() + " Still has appointments with us! \n Please Delete Appointment \n Appointment ID: " + A.getId() + "\nDescription: " + A.getDescription());
+                appointmentCount += 1;
+            }
+        }
+
+        if (appointmentCount == 0) {
+            ButtonType B = Err.alertConfirm("Are you sure you want to delete " + C.getName() + " permanently?");
+
+            if (B == ButtonType.YES) {
+
+                int result = 0;
+                try {
+                    result = Query.deleteCustomer(C.getId());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if (result == 1) {
+                    Err.alertConfirm("Customer " + C.getName() + " has been Deleted successfully.");
+                    allCustomers.remove(C);
+                }
+            } else {
+                Err.alertOk("No records will be Deleted");
+            }
+        } else {Err.alertOk("Some appointments must be deleted.");}
     }
 }
