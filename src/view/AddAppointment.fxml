@@ -4,15 +4,38 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-
 <AnchorPane prefHeight="600.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddAppointmentController">
    <children>
-      <Label layoutX="352.0" layoutY="36.0" text="Add New Appointment">
+      <Label layoutX="353.0" layoutY="18.0" text="Add New Appointment">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <Label layoutX="171.0" layoutY="103.0" text="Title" />
-      <Label layoutX="169.0" layoutY="157.0" text="Description" />
+      <Label layoutX="175.0" layoutY="60.0" text="Appointment ID" />
+      <Label layoutX="175.0" layoutY="100.0" text="Title" />
+      <Label layoutX="175.0" layoutY="140.0" text="Description" />
+      <Label layoutX="175.0" layoutY="180.0" text="Location" />
+      <Label layoutX="175.0" layoutY="220.0" text="Contact" />
+      <Label layoutX="175.0" layoutY="260.0" text="Type" />
+      <Label layoutX="175.0" layoutY="300.0" text="Start Date" />
+      <Label layoutX="175.0" layoutY="340.0" text="End Date" />
+      <Label layoutX="510.0" layoutY="300.0" text="Start Time" />
+      <Label layoutX="510.0" layoutY="340.0" text="End Time" />
+      <Label layoutX="175.0" layoutY="380.0" text="Customer ID" />
+      <Label layoutX="175.0" layoutY="420.0" text="User ID" />
+      <TextField fx:id="appointmentIDInput" disable="true" layoutX="300.0" layoutY="56.0" promptText="Disabled Auto-Generated" />
+      <TextField fx:id="appointmentTitleInput" layoutX="300.0" layoutY="96.0" />
+      <TextField fx:id="appointmentDescriptionInput" layoutX="300.0" layoutY="136.0" />
+      <TextField fx:id="appointmentLocationInput" layoutX="300.0" layoutY="176.0" />
+      <ComboBox fx:id="appointmentContactInput" layoutX="300.0" layoutY="216.0" prefWidth="150.0" />
+      <TextField fx:id="appointmentTypeInput" layoutX="300.0" layoutY="256.0" />
+      <DatePicker fx:id="appointmentStartDateInput" layoutX="300.0" layoutY="296.0" />
+      <DatePicker fx:id="appointmentEndDateInput" layoutX="300.0" layoutY="336.0" />
+      <TextField fx:id="appointmentStartTimeInput" layoutX="586.0" layoutY="296.0" />
+      <TextField fx:id="appointmentEndTimeInput" layoutX="586.0" layoutY="336.0" />
+      <TextField fx:id="appointmentCustomerIDInput" layoutX="300.0" layoutY="376.0" />
+      <TextField fx:id="appointmentUserIDInput" layoutX="300.0" layoutY="416.0" />
+      <Button fx:id="saveNewAppointmentBTN" layoutX="353.0" layoutY="490.0" mnemonicParsing="false" onAction="#saveNewAppointment" text="Save" />
+      <Button fx:id="cancelNewAppointmentBTN" layoutX="490.0" layoutY="490.0" mnemonicParsing="false" onAction="#cancelNewAppointment" text="Cancel" />
    </children>
 </AnchorPane>

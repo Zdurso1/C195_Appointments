@@ -72,6 +72,7 @@ public class DashboardController implements Initializable {
     }
 
     public void addAppointment(ActionEvent actionEvent) {
+        LoadPage.toOther(appointmentAddBTN, "AddAppointment");
     }
 
     public void updateAppointment(ActionEvent actionEvent) {
