@@ -171,37 +171,37 @@ public abstract class Query {
         }
     }
 
-    /*
-    public static void createAppointment() {
+
+    public static void createAppointment(String title, String description, String location, String type, Timestamp start, Timestamp end) {
+
         try {
             // Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By
-            String sql = "INSERT INTO appointments VALUES (?,?,?,?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO appointments VALUES (NULL,?,?,?,?,?,?,NOW(),?,NOW(),?)";
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
 
-            ps.setString(1, );
-            ps.setString(2, );
-            ps.setString(3, );
-            ps.setString(4, );
-            ps.setString(5, );
-            ps.setString(6, );
-            ps.setString(7, );
-            ps.setString(8, );
-            ps.setString(9, );
-            ps.setString(10, );
+            ps.setString(1, title);
+            ps.setString(2, description);
+            ps.setString(3, location);
+            ps.setString(4, type);
+            ps.setTimestamp(5, start);
+            ps.setTimestamp(6, end);
+            ps.setInt(7, getCurrentUserID());
+            ps.setInt(8, getCurrentUserID());
+
 
 
             ps.executeUpdate(sql);
 
 
-            String message = "Appointment has been Created!";
+            String message = "Appointment has been Created! Return to main page?";
             System.out.println(message);
-            Err.alertOk(message);
+            Err.alertConfirm(message);
 
         }catch(SQLException e) {
             e.printStackTrace();
         }
     }
-    */
+
 
 
     public static ObservableList<FirstLevelDivision> getAllDivisions() {
@@ -283,6 +283,30 @@ public abstract class Query {
         rowsAffected = ps.executeUpdate();
 
         return rowsAffected;
+    }
+
+    public static ObservableList<Contact> getAllContacts () {
+        ObservableList<Contact> allContacts = FXCollections.observableArrayList();
+
+        try {
+            String sql = "select * from contacts";
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("Contact_ID");
+                String name = rs.getString("Contact_Name");
+                String email = rs.getString("Email");
+                Contact c = new Contact(id,name,email);
+
+                allContacts.add(c);
+            }
+        }catch(SQLException e) {
+            e.printStackTrace();
+        }
+
+        return allContacts;
     }
 
 }
