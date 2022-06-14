@@ -29,9 +29,6 @@ public abstract class JDBC {
         }
     }
 
-    public static Connection getConnestion() {
-        return connection;
-    }
 
     public static void closeConnection() {
         try {

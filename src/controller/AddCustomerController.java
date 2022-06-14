@@ -27,8 +27,8 @@ public class AddCustomerController implements Initializable {
     public TextField customerPhoneNumberInput;
     public Button addCustomerSaveBTN;
     public Button addCustomerCancelBTN;
-    public ComboBox customerCountryInput;
-    public ComboBox customerFirstLevelDivisionInput;
+    public ComboBox<Country> customerCountryInput;
+    public ComboBox<FirstLevelDivision> customerFirstLevelDivisionInput;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -39,10 +39,13 @@ public class AddCustomerController implements Initializable {
         try {
             allCountries = Query.getAllCountries();
             allDivisions = Query.getAllDivisions();
+
+            customerCountryInput.setItems(allCountries);
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        ObservableList<String> countryNames = FXCollections.observableArrayList();
+        /*ObservableList<String> countryNames = FXCollections.observableArrayList();
 
         // first lambda .... this basically just made me write less.
         allCountries.forEach((c) -> customerCountryInput.getItems().add(c.getName()));
@@ -67,10 +70,17 @@ public class AddCustomerController implements Initializable {
 
                 }
             }
+        });*/
+
+        ObservableList<FirstLevelDivision> finalAllDivisions = allDivisions;
+        customerCountryInput.setOnAction(ActionEvent -> {
+            for (FirstLevelDivision F : finalAllDivisions) {
+                if (F.getCountryID() == customerCountryInput.getValue().getId()) {
+                    relevantDivisions.add(F);
+                }
+            }
+            customerFirstLevelDivisionInput.setItems(relevantDivisions);
         });
-
-
-        FirstLevelDivision customerDivision = (FirstLevelDivision) customerFirstLevelDivisionInput.getValue();
 
 
     }
@@ -78,25 +88,13 @@ public class AddCustomerController implements Initializable {
     // had a class cast exception here for FirstLevelDivision
     public void saveNewCustomer(ActionEvent actionEvent) throws SQLException {
         System.out.println(customerFirstLevelDivisionInput.getSelectionModel().getSelectedItem());
-        Object CFD = customerFirstLevelDivisionInput.getSelectionModel().getSelectedItem();
-
-        int customerDivisionID = 999999999;
-        System.out.println(customerDivisionID);
-
-        for (FirstLevelDivision F : Query.getAllDivisions()) {
-            if (F.getDivision().equals(CFD)) {
-                customerDivisionID = F.getId();
-                System.out.println(F.getId());
-            }
-        }
-
 
         // name, address, postalCode, phone, divisionID
         String name = customerNameInput.getText();
         String address = customerAddressInput.getText();
         String postalCode = customerPostalCodeInput.getText();
         String phone = customerPhoneNumberInput.getText();
-        int divID = customerDivisionID;
+        int divID = customerFirstLevelDivisionInput.getValue().getId();
         System.out.println(divID);
 
 

@@ -9,81 +9,66 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import model.Contact;
+import model.Customer;
+import model.User;
 
 import java.net.URL;
-import java.sql.Date;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.time.*;
+import java.time.temporal.ChronoUnit;
 import java.util.ResourceBundle;
-import java.util.TimeZone;
 
 public class AddAppointmentController implements Initializable {
     public TextField appointmentIDInput;
     public TextField appointmentTitleInput;
     public TextField appointmentDescriptionInput;
     public TextField appointmentLocationInput;
-    public ComboBox appointmentContactInput;
+    public ComboBox<Contact> appointmentContactInput;
     public TextField appointmentTypeInput;
     public DatePicker appointmentStartDateInput;
     public DatePicker appointmentEndDateInput;
-    public ComboBox appointmentStartTimeInput;
-    public ComboBox appointmentEndTimeInput;
-    public TextField appointmentCustomerIDInput;
-    public TextField appointmentUserIDInput;
+    public ComboBox<LocalTime> appointmentStartTimeInput;
+    public ComboBox<LocalTime> appointmentEndTimeInput;
+    public ComboBox<Customer> appointmentCustomerIDInput;
+    public ComboBox<User> appointmentUserIDInput;
     public Button saveNewAppointmentBTN;
     public Button cancelNewAppointmentBTN;
-
-
-    ObservableList<Contact> allContacts = FXCollections.observableArrayList();
-    TimeZone userTimeZone = TimeZone.getDefault();
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        // contact combo boxes
-        ObservableList<String> contactNames = FXCollections.observableArrayList();
+        ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
+        allCustomers = Query.getAllCustomers();
+        appointmentCustomerIDInput.setItems(allCustomers);
+
+
+        ObservableList<Contact> allContacts = FXCollections.observableArrayList();
         allContacts = Query.getAllContacts();
+        appointmentContactInput.setItems(allContacts);
 
-        for (Contact C : allContacts) {
-            contactNames.add(C.getContactName());
-            appointmentContactInput.getItems().add(contactNames.get(contactNames.size()-1));
+        ObservableList<User> allUsers = FXCollections.observableArrayList();
+        allUsers = Query.getAllUsers();
+        appointmentUserIDInput.setItems(allUsers);
+
+
+        ObservableList<LocalTime> time = FXCollections.observableArrayList();
+        for (int i = 0; i < 24; i++) {
+            time.add(LocalTime.of(i,0));
+            //time.add(LocalTime.of(i,15));
+            //time.add(LocalTime.of(i,30));
+            //time.add(LocalTime.of(i,45));
         }
 
+        appointmentStartTimeInput.setItems(time);
 
-        // time combo boxes
-        for (int i = 0; i <= 23; i++) {
-            if (i < 10) {
-                String withZero = String.format("%02d", i);
-                for (int M = 0; M <= 59; M++) {
-
-                    if (M < 10) {
-                        String MwithZero = String.format("%02d", M);
-                        appointmentStartTimeInput.getItems().add(withZero + ":" + MwithZero);
-                        appointmentEndTimeInput.getItems().add(withZero + ":" + MwithZero);
-                    }else {
-                        appointmentStartTimeInput.getItems().add(withZero + ":" + M);
-                        appointmentEndTimeInput.getItems().add(withZero + ":" + M);
-                    }
-
-                }
-            }else {
-                for (int M = 0; M <= 59; M++) {
-                    if(M < 10) {
-                        String MwithZero = String.format("%02d", M);
-                        appointmentStartTimeInput.getItems().add(i + ":" + MwithZero);
-                        appointmentEndTimeInput.getItems().add(i + ":" + MwithZero);
-                    }else{
-                        appointmentStartTimeInput.getItems().add(i + ":" + M);
-                        appointmentEndTimeInput.getItems().add(i + ":" + M);
-
-                    }
-                }
-            }
+        ObservableList<LocalTime> endTime = FXCollections.observableArrayList();
+        for (int i = 1; i < 24; i++) {
+            endTime.add(LocalTime.of(i,0));
+            //endTime.add(LocalTime.of(i,15));
+            //endTime.add(LocalTime.of(i,30));
+            //endTime.add(LocalTime.of(i,45));
         }
-
-
+        endTime.add(LocalTime.of(0,0));
+        appointmentEndTimeInput.setItems(endTime);
 
     }
 
@@ -95,23 +80,19 @@ public class AddAppointmentController implements Initializable {
         String type = appointmentTypeInput.getText();
 
         LocalDate localStartDate = appointmentStartDateInput.getValue();
-        Instant startInstant = Instant.from(localStartDate.atStartOfDay(ZoneId.systemDefault()));
-        Date startDate = (Date) Date.from(startInstant);
-
         LocalDate localEndDate = appointmentEndDateInput.getValue();
-        Instant endInstant = Instant.from(localEndDate.atStartOfDay(ZoneId.systemDefault()));
-        Date endDate = (Date) Date.from(endInstant);
+        LocalTime startTime = appointmentStartTimeInput.getValue();
+        LocalTime endTime = appointmentEndTimeInput.getValue();
+        LocalDateTime startDateTime = LocalDateTime.of(localStartDate, startTime);
+        LocalDateTime endDateTime = LocalDateTime.of(localEndDate, endTime);
 
-        Timestamp start = Timestamp.valueOf(startDate.toString() + appointmentStartTimeInput.getValue() + ":00");
-        Timestamp end = Timestamp.valueOf(endDate.toString() + appointmentEndTimeInput.getValue() + ":00");
+        int userID = appointmentUserIDInput.getValue().getId();
+        String userName = appointmentUserIDInput.getValue().getName();
+        int contactID = appointmentContactInput.getValue().getContactID();
+        int customerID = appointmentCustomerIDInput.getValue().getId();
 
-        System.out.println("Start: " + start + "\nEnd: " + end);
-
-        ZonedDateTime zonedStart= start.toLocalDateTime().atZone(ZoneOffset.UTC);
-        ZonedDateTime zonedEnd = end.toLocalDateTime().atZone(ZoneOffset.UTC);
-
-        Query.createAppointment(title,description,location,type,start,end);
-
+        System.out.println("START DATE TIME: " + startDateTime);
+        Query.createAppointment(title,description,location,type,startDateTime,endDateTime,userName,userID,contactID,customerID);
     }
 
     public void cancelNewAppointment(ActionEvent actionEvent) {
