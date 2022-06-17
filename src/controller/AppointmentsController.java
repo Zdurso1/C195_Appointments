@@ -80,6 +80,8 @@ public class AppointmentsController implements Initializable {
         appointmentCustomerIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         appointmentUserIDColumn.setCellValueFactory(new PropertyValueFactory<>("userID"));
 
+        dialogPane.setContentText("Number of appointments for this month: " + filteredAppointments.size());
+
         // populate months dropdown
         ObservableList<Month> allMonths = FXCollections.observableArrayList();
         for (int m = 1; m <= 12; m++) {
@@ -128,6 +130,8 @@ public class AppointmentsController implements Initializable {
         appointmentCustomerIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         appointmentUserIDColumn.setCellValueFactory(new PropertyValueFactory<>("userID"));
 
+        dialogPane.setContentText("Number of appointments for this month: " + filteredAppointments.size());
+
 
 
     }
@@ -142,7 +146,9 @@ public class AppointmentsController implements Initializable {
             int sevenDaysLater = currentDay + 7;
             int ADay = appointment.getStart().getDayOfMonth();
 
-            if (ADay >= currentDay && ADay <= sevenDaysLater) {filteredAppointments.add(appointment);}
+            if (ADay >= currentDay && ADay <= sevenDaysLater && appointment.getStart().getMonth().equals(LocalDate.now().getMonth())) {
+                filteredAppointments.add(appointment);
+            }
         }
 
         appointmentsTable.setItems(filteredAppointments);
@@ -156,6 +162,8 @@ public class AppointmentsController implements Initializable {
         appointmentEndColumn.setCellValueFactory(new PropertyValueFactory<>("zet"));
         appointmentCustomerIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         appointmentUserIDColumn.setCellValueFactory(new PropertyValueFactory<>("userID"));
+
+        dialogPane.setContentText("Number of appointments for this week: " + filteredAppointments.size());
     }
 
 
@@ -203,6 +211,8 @@ public class AppointmentsController implements Initializable {
         }
         appointmentsTable.setItems(customerAppointments);
 
+        dialogPane.setContentText("Number of appointments for this customer: " + customerAppointments.size());
+
     }
 
 
@@ -213,6 +223,8 @@ public class AppointmentsController implements Initializable {
             filteredAppointments.remove(a);
             if (a.getType().equals(type)){filteredAppointments.add(a);}
         }
+        appointmentsTable.setItems(filteredAppointments);
+        dialogPane.setContentText("Number of appointments for this type: " + filteredAppointments.size());
 
     }
 
@@ -222,6 +234,8 @@ public class AppointmentsController implements Initializable {
             filteredAppointments.remove(a);
             if (a.getContactID() == selectedContact.getContactID()){filteredAppointments.add(a);}
         }
+        appointmentsTable.setItems(filteredAppointments);
+        dialogPane.setContentText("Number of appointments for this Contact: " + filteredAppointments.size());
     }
 
 
@@ -233,6 +247,8 @@ public class AppointmentsController implements Initializable {
             filteredAppointments.remove(a);
             if(a.getStart().getMonth().equals(selectedMonth)){filteredAppointments.add(a);}
         }
+        appointmentsTable.setItems(filteredAppointments);
+        dialogPane.setContentText("Number of appointments for this month: " + filteredAppointments.size());
 
     }
 }
