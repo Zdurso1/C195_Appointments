@@ -14,8 +14,14 @@ import javafx.scene.control.TextField;
 import model.User;
 
 import java.awt.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -108,6 +114,18 @@ public class MainPageController implements Initializable {
             throwables.printStackTrace();
             Err.alertOk(rb.getString("loginUnsuccessful"));
         }
+
+        // login activity logger
+        try {
+            FileWriter loginActivity = new FileWriter("login_activity.txt", true);
+            String text = "Somebody tried logging in with an id of: " + currentUserID
+                    + "\nAttempt Success: " + success + "\nTimestamp: " + LocalDateTime.now(ZoneId.of("UTC")) + " UTC\n\n";
+            loginActivity.write(text);
+            loginActivity.close();
+        }catch (IOException i){
+            i.printStackTrace();
+        }
+        //
 
         if (!success) {
             Err.alertOk(rb.getString("loginUnsuccessful"));

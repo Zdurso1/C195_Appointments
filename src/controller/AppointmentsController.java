@@ -12,13 +12,17 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.Appointment;
+import model.Contact;
+import model.Customer;
 
+import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.sql.Timestamp;
+import java.text.DateFormatSymbols;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.time.format.TextStyle;
+import java.util.*;
 
 public class AppointmentsController implements Initializable {
     public TableView appointmentsTable;
@@ -38,8 +42,15 @@ public class AppointmentsController implements Initializable {
     public Button editBTN;
     public Button deleteBTN;
     public Button homeBTN;
-
+    public ComboBox<Customer> customerComboInput;
+    public ComboBox<Month> eachMonthComboInput;
+    public ComboBox byTypeComboInput;
+    public ComboBox<Contact> byContactComboInput;
+    public DialogPane dialogPane;
     private static Appointment A = null;
+
+
+
     public static Appointment getAppointment() {return A;}
     ObservableList<Appointment> allAppointments = FXCollections.observableArrayList(Query.getAllAppointments());
     ObservableList<Appointment> filteredAppointments = FXCollections.observableArrayList();
@@ -47,6 +58,8 @@ public class AppointmentsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        ObservableList<Customer> allCustomers = FXCollections.observableArrayList(Query.getAllCustomers());
+        customerComboInput.setItems(allCustomers);
 
         for(Appointment appointment : allAppointments){
             Month currentMonth = LocalDate.now().getMonth();
@@ -67,7 +80,28 @@ public class AppointmentsController implements Initializable {
         appointmentCustomerIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         appointmentUserIDColumn.setCellValueFactory(new PropertyValueFactory<>("userID"));
 
+        // populate months dropdown
+        ObservableList<Month> allMonths = FXCollections.observableArrayList();
+        for (int m = 1; m <= 12; m++) {
+            allMonths.add(Month.of(m));
+            System.out.println(Month.of(m));
+        }
+        eachMonthComboInput.setItems(allMonths);
 
+        // populate types dropdown
+        ObservableList<String> allTypes = FXCollections.observableArrayList();
+        for (Appointment a : allAppointments) {
+            String type = a.getType();
+            if(allTypes.contains(type)){
+                System.out.println("types already contains "+type+"\n");
+            }else{allTypes.add(type);
+                System.out.println(allTypes);}
+        }
+        byTypeComboInput.setItems(allTypes);
+
+        // populate contact dropdown
+        ObservableList<Contact> allContacts = FXCollections.observableArrayList(Query.getAllContacts());
+        byContactComboInput.setItems(allContacts);
 
     }
 
@@ -93,6 +127,8 @@ public class AppointmentsController implements Initializable {
         appointmentEndColumn.setCellValueFactory(new PropertyValueFactory<>("zet"));
         appointmentCustomerIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         appointmentUserIDColumn.setCellValueFactory(new PropertyValueFactory<>("userID"));
+
+
 
     }
 
@@ -156,5 +192,47 @@ public class AppointmentsController implements Initializable {
 
     public void goHome(ActionEvent actionEvent) {
         LoadPage.toDashboard(homeBTN);
+    }
+
+    public void byCustomer(ActionEvent actionEvent) {
+        Customer c = customerComboInput.getValue();
+        ObservableList<Appointment> customerAppointments = FXCollections.observableArrayList();
+        for (Appointment a : allAppointments){
+            if (a.getCustomerID() == c.getId()){customerAppointments.add(a);}
+
+        }
+        appointmentsTable.setItems(customerAppointments);
+
+    }
+
+
+    public void byType(ActionEvent actionEvent) {
+        String type = byTypeComboInput.getValue().toString();
+        System.out.println(type);
+        for (Appointment a : allAppointments) {
+            filteredAppointments.remove(a);
+            if (a.getType().equals(type)){filteredAppointments.add(a);}
+        }
+
+    }
+
+    public void byContact(ActionEvent actionEvent) {
+        Contact selectedContact = byContactComboInput.getValue();
+        for (Appointment a : allAppointments){
+            filteredAppointments.remove(a);
+            if (a.getContactID() == selectedContact.getContactID()){filteredAppointments.add(a);}
+        }
+    }
+
+
+    public void monthSelected(ActionEvent actionEvent) {
+        Month selectedMonth = eachMonthComboInput.getValue();
+        System.out.println("Selected Month: "+selectedMonth);
+
+        for (Appointment a : allAppointments) {
+            filteredAppointments.remove(a);
+            if(a.getStart().getMonth().equals(selectedMonth)){filteredAppointments.add(a);}
+        }
+
     }
 }

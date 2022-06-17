@@ -37,6 +37,6 @@
       <Button fx:id="customerAddBTN" layoutX="595.0" layoutY="288.0" mnemonicParsing="false" onAction="#addCustomer" text="Add" />
       <Button fx:id="customerUpdateBTN" layoutX="695.0" layoutY="288.0" mnemonicParsing="false" onAction="#updateCustomer" text="Update" />
       <Button fx:id="customerDeleteBTN" layoutX="815.0" layoutY="288.0" mnemonicParsing="false" onAction="#deleteCustomer" text="Delete" />
-      <Button layoutX="89.0" layoutY="41.0" mnemonicParsing="false" onAction="#viewFiltered" text="View By Month or Week" />
+      <Button layoutX="118.0" layoutY="41.0" mnemonicParsing="false" onAction="#viewFiltered" text="View Reports" />
    </children>
 </AnchorPane>

@@ -16,6 +16,7 @@ import model.User;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.ZonedDateTime;
 import java.util.ResourceBundle;
 
 public class DashboardController implements Initializable {
@@ -68,6 +69,25 @@ public class DashboardController implements Initializable {
         customerPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
         customerDivisionIDColumn.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
 
+        boolean within15 = false;
+        int withinID = 0;
+        ZonedDateTime withinZST = ZonedDateTime.now();
+        for (Appointment appointment : allAppointments) {
+            // does this need to be 16 minutes to be within the 15 minute timespan?
+
+            if (appointment.getUserID() == Query.getCurrentUser().getId()) {
+                if (appointment.getZst().isBefore(ZonedDateTime.now().plusMinutes(16)) && appointment.getZst().isAfter(ZonedDateTime.now())) {
+                    within15 = true;
+                    withinID = appointment.getId();
+                    withinZST = appointment.getZst();
+                }
+            }
+        }
+        if (within15) {
+            Err.alertOk("Better Hurry! Theres an appointment in the next 15 minutes.\nID: " + withinID + "\nStart: " + withinZST);
+        }else{
+            Err.alertOk("No appointments within 15 minutes.");
+        }
 
     }
 
@@ -158,4 +178,5 @@ public class DashboardController implements Initializable {
     public void viewFiltered(ActionEvent actionEvent) {
         LoadPage.toOther(appointmentAddBTN,"Appointments");
     }
+
 }
