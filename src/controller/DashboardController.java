@@ -61,7 +61,7 @@ public class DashboardController implements Initializable {
         appointmentIDColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         appointmentTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         appointmentTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-        appointmentStartColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
+        appointmentStartColumn.setCellValueFactory(new PropertyValueFactory<>("zst"));
 
         customerIDColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -82,6 +82,8 @@ public class DashboardController implements Initializable {
 
         if (A == null) {
             Err.alertOk("Must select an Appointment to Modify");
+        }else{
+            LoadPage.toOther(appointmentUpdateBTN, "EditAppointment");
         }
     }
 
@@ -151,5 +153,9 @@ public class DashboardController implements Initializable {
                 Err.alertOk("No records will be Deleted");
             }
         } else {Err.alertOk("Some appointments must be deleted.");}
+    }
+
+    public void viewFiltered(ActionEvent actionEvent) {
+        LoadPage.toOther(appointmentAddBTN,"Appointments");
     }
 }

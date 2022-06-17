@@ -2,12 +2,14 @@ package helper;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.ButtonType;
 import model.*;
 
 import java.sql.*;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public abstract class Query {
@@ -145,10 +147,11 @@ public abstract class Query {
 
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-                String formattedStart = start.toLocalDateTime().format(formatter);
-                String formattedEnd = end.toLocalDateTime().format(formatter);
+                LocalDateTime Start = start.toLocalDateTime();
+                LocalDateTime End = end.toLocalDateTime();
 
-                Appointment a = new Appointment(id,title,description,location,type,formattedStart,formattedEnd,customerID,userID,contactID);
+
+                Appointment a = new Appointment(id,title,description,location,type,Start,End,customerID,userID,contactID);
 
                 allAppointments.add(a);
             }
@@ -177,13 +180,13 @@ public abstract class Query {
     }
 
 
-    public static void createAppointment(String title, String description, String location, String type, LocalDateTime start, LocalDateTime end,  String userName, int userID, int contactID, int customerID) {
+    public static int createAppointment(String title, String description, String location, String type, LocalDateTime start, LocalDateTime end,  String userName, int userID, int contactID, int customerID) {
         try {
+            //title = "x";
             // Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID
             String sql = "INSERT INTO appointments "
                     + "(Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) "
                     + "VALUES (?,?,?,?,?,?,NOW(),?,NOW(),?,?,?,?)";
-
             System.out.println("TIMESTAMP IN QUERY: " + Timestamp.valueOf(start));
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
 
@@ -202,16 +205,45 @@ public abstract class Query {
             ps.setInt(10, userID);     // User_ID INT(10) (FK)
             ps.setInt(11, contactID);  // Contact_ID INT(10) (FK)
 
-            ps.executeUpdate(sql);
+            int rows = ps.executeUpdate();
 
-            String message = "Appointment has been Created! Return to main page?";
-            System.out.println(message);
-            Err.alertConfirm(message);
+            return rows;
+
 
         }catch(SQLException e) {
             System.out.println("SQL Error Cause: " + e.getCause());
             e.printStackTrace();
         }
+        return 99;
+    }
+
+    public static int updateAppointment(int id, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end,  String userName, int userID, int contactID, int customerID) throws SQLException {
+        try {
+            String sql = "UPDATE appointments SET"
+                    + " Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Last_Update = NOW(), Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ?"
+                    + " WHERE Appointment_ID = ?";
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+
+            ps.setString(1,title);
+            ps.setString(2,description);
+            ps.setString(3,location);
+            ps.setString(4,type);
+            ps.setTimestamp(5,Timestamp.valueOf(start));
+            ps.setTimestamp(6,Timestamp.valueOf(end));
+            ps.setString(7,userName);
+            ps.setInt(8,customerID);
+            ps.setInt(9,userID);
+            ps.setInt(10,contactID);
+            ps.setInt(11,id);
+
+            return ps.executeUpdate();
+
+        }catch(SQLException s) {
+            System.out.println("Error Cause: " + s.getCause());
+            s.printStackTrace();
+        }
+
+        return 9999;
     }
 
 
@@ -244,14 +276,12 @@ public abstract class Query {
         // Customer_ID, Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, Last_Update, Last_Updated_By, Division_ID
         // name, address, postalCode, phone, divisionID
         try {
-            String sql = "INSERT INTO customers (Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, Last_Update, Last_Updated_By, Division_ID) " +
-                    "VALUES ('" +name+ "','" +address+ "','" +postalCode+ "','"+phone+"',CURRENT_TIMESTAMP(),'" + currentUser.getName() + "',NOW(),'" + currentUser.getName() + "','" + divisionID + "')";
-            /*
+
             String sql = "INSERT INTO customers "+
                     "(Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, Last_Update, Last_Updated_By, Division_ID) "+
-                    "VALUES(?,?,?,?,NOW(),?,NOW(),?,?)";*/
+                    "VALUES(?,?,?,?,NOW(),?,NOW(),?,?)";
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-            /*
+            /**/
             ps.setString(1,name);
             ps.setString(2,address);
             ps.setString(3,postalCode);
@@ -260,9 +290,9 @@ public abstract class Query {
             ps.setString(5,currentUser.getName());
             // NOW()
             ps.setString(6, currentUser.getName());
-            ps.setInt(7, divisionID);*/
+            ps.setInt(7, divisionID);
 
-            int rs = ps.executeUpdate(sql);
+            int rs = ps.executeUpdate();
 
             if (rs == 1) {
                 return rs;
@@ -333,5 +363,7 @@ public abstract class Query {
 
         return allContacts;
     }
+
+
 
 }

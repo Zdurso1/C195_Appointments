@@ -1,6 +1,8 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 public class Appointment {
     /**
@@ -31,12 +33,12 @@ public class Appointment {
     /**
      * Appointment start Date and Time
      */
-    private String start;
+    private LocalDateTime start;
 
     /**
      * Appointment end Date and "Time
      */
-    private String end;
+    private LocalDateTime end;
 
     /**
      * Appointment's Customer ID
@@ -54,6 +56,16 @@ public class Appointment {
     private int contactID;
 
     /**
+     * Zoned Date Time of Start for display purposes
+     */
+    private ZonedDateTime zst;
+
+    /**
+     * Zoned Date Time of End for display purposes
+     */
+    private ZonedDateTime zet;
+
+    /**
      * Constructor for Appointment
      * @param id id
      * @param title title
@@ -66,7 +78,8 @@ public class Appointment {
      * @param userID User ID
      * @param contactID Contact ID
      */
-    public Appointment(int id, String title, String description, String location, String type, String start, String end, int customerID, int userID, int contactID) {
+
+    public Appointment(int id, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, int customerID, int userID, int contactID) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -77,6 +90,8 @@ public class Appointment {
         this.customerID = customerID;
         this.userID = userID;
         this.contactID = contactID;
+        this.zst = ZonedDateTime.of(start, ZoneId.systemDefault());
+        this.zet = ZonedDateTime.of(end,ZoneId.systemDefault());
     }
 
     /**
@@ -163,7 +178,7 @@ public class Appointment {
      * Getter for Appointment Start Date and Time
      * @return Start Date and Time
      */
-    public String getStart() {
+    public LocalDateTime getStart() {
         return start;
     }
 
@@ -171,7 +186,7 @@ public class Appointment {
      * Setter for Appointment Start Date and Time
      * @param start Start Date and Time
      */
-    public void setStart(String start) {
+    public void setStart(LocalDateTime start) {
         this.start = start;
     }
 
@@ -179,7 +194,7 @@ public class Appointment {
      * Getter for Appointment End Date and Time
      * @return End Date and Time
      */
-    public String getEnd() {
+    public LocalDateTime getEnd() {
         return end;
     }
 
@@ -187,7 +202,7 @@ public class Appointment {
      * Setter for Appointment End Date and Time
      * @param end End Date and Time
      */
-    public void setEnd(String end) {
+    public void setEnd(LocalDateTime end) {
         this.end = end;
     }
 
@@ -238,4 +253,17 @@ public class Appointment {
     public void setContactID(int contactID) {
         this.contactID = contactID;
     }
+
+    /**
+     * Getter for Appointment Start as a Zoned Date Time
+     * @return Zoned Start Time
+     */
+    public ZonedDateTime getZst(){return zst;}
+
+    /**
+     * Getter for Appointment End as a Zoned Date Time
+     * @return Zoned End Time
+     */
+    public ZonedDateTime getZet(){return zet;}
+
 }

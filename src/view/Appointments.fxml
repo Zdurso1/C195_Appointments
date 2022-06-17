@@ -2,16 +2,39 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AppointmentsController">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AppointmentsController">
    <children>
-      <TableView layoutY="60.0" prefHeight="220.0" prefWidth="375.0">
+      <TableView fx:id="appointmentsTable" layoutY="42.0" prefHeight="300.0" prefWidth="900.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
-            <TableColumn prefWidth="75.0" text="Column X" />
+          <TableColumn fx:id="appointmentIDColumn" prefWidth="40.0" text="ID" />
+          <TableColumn fx:id="appointmentTitleColumn" prefWidth="89.0" text="Title" />
+            <TableColumn fx:id="appointmentDescriptionColumn" prefWidth="141.0" text="Description" />
+            <TableColumn fx:id="appointmentLocationColumn" prefWidth="96.0" text="Location" />
+            <TableColumn fx:id="appointmentContactColumn" prefWidth="117.0" text="Contact" />
+            <TableColumn fx:id="appointmentTypeColumn" prefWidth="89.0" text="Type" />
+            <TableColumn fx:id="appointmentStartColumn" prefWidth="94.0" text="Start" />
+            <TableColumn fx:id="appointmentEndColumn" prefWidth="99.0" text="End" />
+            <TableColumn fx:id="appointmentCustomerIDColumn" prefWidth="84.0" text="Customer ID" />
+            <TableColumn fx:id="appointmentUserIDColumn" prefWidth="50.0" text="User ID" />
         </columns>
       </TableView>
+      <RadioButton fx:id="viewMonthRadio" layoutX="304.0" layoutY="14.0" mnemonicParsing="false" onAction="#viewMonth" selected="true" text="View By Month">
+         <toggleGroup>
+            <ToggleGroup fx:id="monthWeek" />
+         </toggleGroup>
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </RadioButton>
+      <RadioButton fx:id="viewWeekRadio" layoutX="468.0" layoutY="14.0" mnemonicParsing="false" onAction="#viewWeek" text="View By Week" toggleGroup="$monthWeek">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </RadioButton>
+      <Button fx:id="editBTN" layoutX="205.0" layoutY="376.0" mnemonicParsing="false" onAction="#edit" text="Edit Appointment" />
+      <Button fx:id="deleteBTN" layoutX="413.0" layoutY="376.0" mnemonicParsing="false" onAction="#delete" text="Delete Appointment" />
+      <Button fx:id="homeBTN" layoutX="647.0" layoutY="376.0" mnemonicParsing="false" onAction="#goHome" text="Home" />
    </children>
 </AnchorPane>

@@ -6,8 +6,10 @@ import helper.Query;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import model.Appointment;
 import model.Contact;
 import model.Customer;
 import model.User;
@@ -15,10 +17,13 @@ import model.User;
 import java.net.URL;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class AddAppointmentController implements Initializable {
     public TextField appointmentIDInput;
+    @FXML
     public TextField appointmentTitleInput;
     public TextField appointmentDescriptionInput;
     public TextField appointmentLocationInput;
@@ -74,6 +79,8 @@ public class AddAppointmentController implements Initializable {
 
     public void saveNewAppointment(ActionEvent actionEvent) {
         // Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By
+        int overlappingID = 0;
+        boolean overlapping = false;
         String title = appointmentTitleInput.getText();
         String description = appointmentDescriptionInput.getText();
         String location = appointmentLocationInput.getText();
@@ -92,7 +99,49 @@ public class AddAppointmentController implements Initializable {
         int customerID = appointmentCustomerIDInput.getValue().getId();
 
         System.out.println("START DATE TIME: " + startDateTime);
-        Query.createAppointment(title,description,location,type,startDateTime,endDateTime,userName,userID,contactID,customerID);
+
+        ZonedDateTime ZStart = startDateTime.atZone(ZoneId.systemDefault());
+        ZonedDateTime ZEnd = endDateTime.atZone(ZoneId.systemDefault());
+        ZonedDateTime ESTStart = ZStart.withZoneSameInstant(ZoneId.of(ZoneId.SHORT_IDS.get("EST")));
+        ZonedDateTime ESTEnd = ZEnd.withZoneSameInstant(ZoneId.of(ZoneId.SHORT_IDS.get("EST")));
+
+        if(ESTStart.getHour() < 8 || ESTStart.getHour() > 22 || ESTEnd.getHour() < 8 || ESTEnd.getHour() > 22) {
+            Err.alertOk("Appointment times may NOT be outside business hours of 8AM and 10PM EST (Hour: 22)\nPlease adjust times");
+        }else {
+
+            ObservableList<Appointment> allAppointments = FXCollections.observableArrayList(Query.getAllAppointments());
+            for (Appointment appointment : allAppointments) {
+                LocalDateTime AStart = appointment.getStart();
+                LocalDateTime AEnd = appointment.getEnd();
+                LocalDateTime myStart = startDateTime;
+                LocalDateTime myEnd = endDateTime;
+
+                if (appointment.getCustomerID() == customerID){
+                    if(myStart.isEqual(AStart)){overlapping = true; overlappingID = appointment.getId();}
+                    if((myStart.isAfter(AStart) && (myStart.isBefore(AEnd)))){overlapping = true; overlappingID = appointment.getId();}
+                    if((myEnd.isAfter(AStart)) && (myEnd.isBefore(AEnd))){overlapping = true; overlappingID = appointment.getId();}
+                    if((myStart.isBefore(AStart)) && (myEnd.isAfter(AEnd))){overlapping = true; overlappingID = appointment.getId();}
+                }
+
+            }
+
+            if (overlapping == false) {
+
+                int rows = Query.createAppointment(title, description, location, type, startDateTime, endDateTime, userName, userID, contactID, customerID);
+                if (rows == 1) {
+                    String message = "Appointment has been Created! Return to main page?";
+                    System.out.println(message);
+                    ButtonType B = Err.alertConfirm(message);
+                    if (B == ButtonType.YES) {
+                        LoadPage.toDashboard(cancelNewAppointmentBTN);
+                    }
+                } else {
+                    Err.alertOk("Something went wrong.");
+                }
+            }else{
+                Err.alertOk("This appointment overlaps with another appointment. Overlapping appointmentID = " + overlappingID);
+            }
+        }
     }
 
     public void cancelNewAppointment(ActionEvent actionEvent) {
