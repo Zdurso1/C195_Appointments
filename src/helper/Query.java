@@ -12,11 +12,24 @@ import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Query -- Helper function -- abstract class containing all database queries used throughout the program
+ */
 public abstract class Query {
 
+    /**
+     * Current user is needed throughout the program, so this comes in handy
+     * Current user assigned in the login method if login was successful
+     * -- also a getter for the current user
+     */
     private static User currentUser;
     public static User getCurrentUser() {return currentUser;}
 
+    /**
+     * Get all countries method -- returns a list of all available countries
+     * @return returns a list of all available countries
+     * @throws SQLException SQL Exception
+     */
     public static ObservableList<Country> getAllCountries() throws SQLException {
 
         ObservableList<Country> countriesList = FXCollections.observableArrayList();
@@ -40,6 +53,10 @@ public abstract class Query {
         return countriesList;
     }
 
+    /**
+     * Get All Users Method
+     * @return Returns a list of all user records within the system
+     */
     public static ObservableList<User> getAllUsers() {
         ObservableList<User> allUsers = FXCollections.observableArrayList();
 
@@ -64,6 +81,14 @@ public abstract class Query {
         return allUsers;
     }
 
+    /**
+     * Login Method -- Validates that anyone trying to enter the system is a valid user
+     * LAMBDA -- Uses a lambda to assign the current (Logged In) user
+     * @param id User ID
+     * @param pwd User Password
+     * @return boolean successful
+     * @throws SQLException SQL Exception
+     */
     public static boolean login(int id, String pwd) throws SQLException {
         boolean success = false;
         ObservableList<User> allUsers = FXCollections.observableArrayList();
@@ -85,6 +110,32 @@ public abstract class Query {
                     allUsers.forEach(User -> {if(User.getId() == userID){currentUser = User;}});
                     success = true;
                     System.out.println(password + " " + userID);
+
+                    // check 15
+                    ObservableList<Appointment> allAppointments = FXCollections.observableArrayList(getAllAppointments());
+                    boolean within15 = false;
+                    int withinID = 0;
+                    ZonedDateTime withinZST = ZonedDateTime.now();
+                    for (Appointment appointment : allAppointments) {
+                        // does this need to be 16 minutes to be within the 15 minute timespan?
+
+                        if (appointment.getUserID() == Query.getCurrentUser().getId()) {
+                            if (appointment.getZst().isBefore(ZonedDateTime.now().plusMinutes(16)) && appointment.getZst().isAfter(ZonedDateTime.now())) {
+                                within15 = true;
+                                withinID = appointment.getId();
+                                withinZST = appointment.getZst();
+                            }
+                        }
+                    }
+                    if (within15) {
+                        Err.alertOk("Better Hurry! Theres an appointment in the next 15 minutes.\nID: " + withinID + "\nStart: " + withinZST);
+
+                    }else{
+                        Err.alertOk("No appointments within 15 minutes.");
+
+                    }
+
+                    //
                 }
             }
 
@@ -97,6 +148,10 @@ public abstract class Query {
     }
 
 
+    /**
+     * Get All Customers Method
+     * @return Returns a list of all customer records within the system
+     */
     public static ObservableList<Customer> getAllCustomers() {
 
         ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
@@ -125,6 +180,11 @@ public abstract class Query {
         return allCustomers;
     }
 
+
+    /**
+     * Get All Appointments Method
+     * @return Returns a list of all appointment records within the system
+     */
     public static ObservableList<Appointment> getAllAppointments() {
         ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
         try {
@@ -162,6 +222,11 @@ public abstract class Query {
         return allAppointments;
     }
 
+
+    /**
+     * Delete Appointment Method -- Deletes the selected appointment record
+     * @param appointmentID the selected appointment record's ID
+     */
     public static void deleteAppointment(int appointmentID) {
         try {
             String sql = "DELETE FROM appointments WHERE Appointment_ID = " + appointmentID;
@@ -180,9 +245,22 @@ public abstract class Query {
     }
 
 
+    /**
+     * Create Appointment Method -- creates a new appointment record
+     * @param title Appointment Title
+     * @param description Appointment Description
+     * @param location Appointment Location
+     * @param type Appointment Type
+     * @param start Appointment Start DateTime
+     * @param end Appointment End DateTime
+     * @param userName Appointment creators User Name
+     * @param userID Appointment creators User ID
+     * @param contactID Appointment Contact ID
+     * @param customerID Appointment Customer ID
+     * @return Number of Rows Affected
+     */
     public static int createAppointment(String title, String description, String location, String type, LocalDateTime start, LocalDateTime end,  String userName, int userID, int contactID, int customerID) {
         try {
-            //title = "x";
             // Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID
             String sql = "INSERT INTO appointments "
                     + "(Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) "
@@ -217,6 +295,23 @@ public abstract class Query {
         return 99;
     }
 
+
+    /**
+     * Update Appointment Method -- updates a selected appointment record
+     * @param id Appointment ID
+     * @param title Appointment Title
+     * @param description Appointment Description
+     * @param location Appointment Location
+     * @param type Appointment Type
+     * @param start Appointment Start DateTime
+     * @param end Appointment End DateTime
+     * @param userName Appointment User Name -- creator
+     * @param userID Appointment User ID -- creator
+     * @param contactID Appointment Contact ID
+     * @param customerID Appointment Customer ID
+     * @return Number of Rows Affected
+     * @throws SQLException SQL Exception
+     */
     public static int updateAppointment(int id, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end,  String userName, int userID, int contactID, int customerID) throws SQLException {
         try {
             String sql = "UPDATE appointments SET"
@@ -247,7 +342,10 @@ public abstract class Query {
     }
 
 
-
+    /**
+     * Get All Divisions Method
+     * @return Returns a list of all first level divisions
+     */
     public static ObservableList<FirstLevelDivision> getAllDivisions() {
         ObservableList<FirstLevelDivision> allDivisions = FXCollections.observableArrayList();
 
@@ -272,6 +370,17 @@ public abstract class Query {
         return allDivisions;
     }
 
+
+    /**
+     * Add Customer Method -- adds a new customer record to the database
+     * @param name Customer Name
+     * @param address Customer Address
+     * @param postalCode Customer Postal Code
+     * @param phone Customer Phone Number
+     * @param divisionID Customer Division ID
+     * @return Number of rows affected
+     * @throws SQLException SQL Exception
+     */
     public static int addCustomer(String name, String address, String postalCode, String phone, int divisionID) throws SQLException {
         // Customer_ID, Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, Last_Update, Last_Updated_By, Division_ID
         // name, address, postalCode, phone, divisionID
@@ -308,7 +417,11 @@ public abstract class Query {
     }
 
 
-
+    /**
+     * Deletes a selected customer record from the database
+     * @param customerID ID of selected Customer Record
+     * @return Number of rows affected
+     */
     public static int deleteCustomer (int customerID) {
         int result = 0;
         try {
@@ -324,6 +437,18 @@ public abstract class Query {
         return result;
     }
 
+
+    /**
+     * Update Customer MEthod -- Updates a customer record
+     * @param customerID Customer ID -- Disabled Auto-Populated
+     * @param customerName Customer Name
+     * @param customerAddress Customer Address
+     * @param customerPostalCode Customer Postal Code
+     * @param customerPhone Customer Phone Number
+     * @param division Customer First Level Division
+     * @return Number of rows affected
+     * @throws SQLException SQL Exception
+     */
     public static int updateCustomer (int customerID, String customerName, String customerAddress, String customerPostalCode, String customerPhone, int division) throws SQLException {
         int rowsAffected = 0;
         String sql = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Division_ID = ? WHERE Customer_ID = ?";
@@ -340,6 +465,11 @@ public abstract class Query {
         return rowsAffected;
     }
 
+
+    /**
+     * Get All Contacts Method
+     * @return Returns a list of all contact records within the system
+     */
     public static ObservableList<Contact> getAllContacts () {
         ObservableList<Contact> allContacts = FXCollections.observableArrayList();
 

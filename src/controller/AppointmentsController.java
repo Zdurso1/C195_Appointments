@@ -25,36 +25,139 @@ import java.time.format.TextStyle;
 import java.util.*;
 
 public class AppointmentsController implements Initializable {
+
+    /**
+     * Appointments Table -- displays filtered appointment records
+     */
     public TableView appointmentsTable;
+
+    /**
+     * Appointment ID Column
+     */
     public TableColumn appointmentIDColumn;
+
+    /**
+     * Appointment Title Column
+     */
     public TableColumn appointmentTitleColumn;
+
+    /**
+     * Appointment Location Column
+     */
     public TableColumn appointmentLocationColumn;
+
+    /**
+     * Appointment Description Column
+     */
     public TableColumn appointmentDescriptionColumn;
+
+    /**
+     * Appointment Type Column
+     */
     public TableColumn appointmentTypeColumn;
+
+    /**
+     * Appointment Start Date Time Column
+     */
     public TableColumn appointmentStartColumn;
+
+    /**
+     * Appointment End Date Time Column
+     */
     public TableColumn appointmentEndColumn;
+
+    /**
+     * Appointment Contact Column
+     */
     public TableColumn appointmentContactColumn;
+
+    /**
+     * Appointment Customer ID Column
+     */
     public TableColumn appointmentCustomerIDColumn;
+
+    /**
+     * Appointment User ID Column
+     */
     public TableColumn appointmentUserIDColumn;
+
+    /**
+     * Toggle group for current month or next 7 days (week) Filter
+     */
     public ToggleGroup monthWeek;
+
+    /**
+     * Radio Button to filter appointments by current month
+     */
     public RadioButton viewMonthRadio;
+
+    /**
+     * Radio button to filter appointments for the next 7 days
+     */
     public RadioButton viewWeekRadio;
+
+    /**
+     * Edit button -- Sends user to edit page if appointment was selected first
+     */
     public Button editBTN;
+
+    /**
+     * Delete button -- deletes appointment record if appointment was selected first
+     */
     public Button deleteBTN;
+
+    /**
+     * Home button -- sends user to main dashboard
+     */
     public Button homeBTN;
+
+    /**
+     * Dropdown list of users to filter appointments by specific user record
+     */
     public ComboBox<Customer> customerComboInput;
+
+    /**
+     * Dropdown menu to filter appointments by specific month
+     */
     public ComboBox<Month> eachMonthComboInput;
+
+    /**
+     * Dropdown menu to filter appointments by selected type
+     */
     public ComboBox byTypeComboInput;
+
+    /**
+     * Dropdown menu to filter appointments by selected contact record
+     */
     public ComboBox<Contact> byContactComboInput;
+
+    /**
+     * Dialog pane for displaying count of records that match selected filter
+     */
     public DialogPane dialogPane;
+
+    /**
+     * Selected appointment and a getter for selected appointment
+     */
     private static Appointment A = null;
-
-
-
     public static Appointment getAppointment() {return A;}
+
+    /**
+     * List of all appointments
+     */
     ObservableList<Appointment> allAppointments = FXCollections.observableArrayList(Query.getAllAppointments());
+
+    /**
+     * List of filtered appointments
+     */
     ObservableList<Appointment> filteredAppointments = FXCollections.observableArrayList();
 
+
+    /**
+     * Initialize Method  -- prepares page for use and view by user
+     * @param url url
+     * @param resourceBundle resource bundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -107,6 +210,11 @@ public class AppointmentsController implements Initializable {
 
     }
 
+
+    /**
+     * View by current month filter method
+     * @param actionEvent click
+     */
     public void viewMonth(ActionEvent actionEvent) {
         ObservableList<Appointment> allAppointments = FXCollections.observableArrayList(Query.getAllAppointments());
         ObservableList<Appointment> filteredAppointments = FXCollections.observableArrayList();
@@ -136,6 +244,11 @@ public class AppointmentsController implements Initializable {
 
     }
 
+
+    /**
+     * View by next 7 days filter method
+     * @param actionEvent click
+     */
     public void viewWeek(ActionEvent actionEvent) {
         ObservableList<Appointment> allAppointments = FXCollections.observableArrayList(Query.getAllAppointments());
         ObservableList<Appointment> filteredAppointments = FXCollections.observableArrayList();
@@ -167,6 +280,10 @@ public class AppointmentsController implements Initializable {
     }
 
 
+    /**
+     * Edit method -- sends user to edit page and sets selected appointment for editing
+     * @param actionEvent click
+     */
     public void edit(ActionEvent actionEvent) {
         TableView.TableViewSelectionModel<Appointment> appointmentSelection = appointmentsTable.getSelectionModel();
         appointmentSelection.setSelectionMode(SelectionMode.SINGLE);
@@ -179,6 +296,11 @@ public class AppointmentsController implements Initializable {
         }
     }
 
+
+    /**
+     * Delete Method -- deletes appointment record if one has been selected
+     * @param actionEvent
+     */
     public void delete(ActionEvent actionEvent) {
 
         TableView.TableViewSelectionModel<Appointment> appointmentSelection = appointmentsTable.getSelectionModel();
@@ -198,10 +320,20 @@ public class AppointmentsController implements Initializable {
 
     }
 
+
+    /**
+     * Sends user to main dashboard
+     * @param actionEvent click
+     */
     public void goHome(ActionEvent actionEvent) {
         LoadPage.toDashboard(homeBTN);
     }
 
+
+    /**
+     * Filter appointments by selected customer
+     * @param actionEvent click
+     */
     public void byCustomer(ActionEvent actionEvent) {
         Customer c = customerComboInput.getValue();
         ObservableList<Appointment> customerAppointments = FXCollections.observableArrayList();
@@ -216,6 +348,10 @@ public class AppointmentsController implements Initializable {
     }
 
 
+    /**
+     * Filter appointments by type method
+     * @param actionEvent click
+     */
     public void byType(ActionEvent actionEvent) {
         String type = byTypeComboInput.getValue().toString();
         System.out.println(type);
@@ -228,6 +364,11 @@ public class AppointmentsController implements Initializable {
 
     }
 
+
+    /**
+     * Filter appointments by selected contact method
+     * @param actionEvent click
+     */
     public void byContact(ActionEvent actionEvent) {
         Contact selectedContact = byContactComboInput.getValue();
         for (Appointment a : allAppointments){
@@ -239,6 +380,10 @@ public class AppointmentsController implements Initializable {
     }
 
 
+    /**
+     * Filter appointments by selected month method
+     * @param actionEvent click
+     */
     public void monthSelected(ActionEvent actionEvent) {
         Month selectedMonth = eachMonthComboInput.getValue();
         System.out.println("Selected Month: "+selectedMonth);

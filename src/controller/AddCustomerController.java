@@ -21,15 +21,52 @@ import java.util.ResourceBundle;
 
 
 public class AddCustomerController implements Initializable {
+    /**
+     * Customer Name input field
+     */
     public TextField customerNameInput;
+
+    /**
+     * Customer Address input field
+     */
     public TextField customerAddressInput;
+
+    /**
+     * Customer Postal Code input field
+     */
     public TextField customerPostalCodeInput;
+
+    /**
+     * Customer Phone Number input field
+     */
     public TextField customerPhoneNumberInput;
+
+    /**
+     * Save Button -- Adds new customer to the database
+     */
     public Button addCustomerSaveBTN;
+
+    /**
+     * Cancel Button -- Throws away all user input and returns user to main dashboard
+     */
     public Button addCustomerCancelBTN;
+
+    /**
+     * Dropdown menu with all available countries to select from
+     */
     public ComboBox<Country> customerCountryInput;
+
+    /**
+     * Dropdown menu with all relevant first level divisions for selected country
+     */
     public ComboBox<FirstLevelDivision> customerFirstLevelDivisionInput;
 
+    /**
+     * Initialize method -- Prepares the page for use.
+     * LAMBDA -- Uses a lambda to populate first level division dropdown list once a country is selected.
+     * @param url url
+     * @param resourceBundle resource bundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ObservableList<Country> allCountries = FXCollections.observableArrayList();
@@ -45,32 +82,7 @@ public class AddCustomerController implements Initializable {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        /*ObservableList<String> countryNames = FXCollections.observableArrayList();
 
-        // first lambda .... this basically just made me write less.
-        allCountries.forEach((c) -> customerCountryInput.getItems().add(c.getName()));
-
-        ObservableList<FirstLevelDivision> finalAllDivisions = allDivisions;
-        ObservableList<Country> finalAllCountries = allCountries;
-
-        customerCountryInput.setOnAction(actionEvent -> {
-            int index = customerCountryInput.getSelectionModel().getSelectedIndex();
-            System.out.println("selected ID = " + finalAllCountries.get(index).getId() + "\n\n" + customerFirstLevelDivisionInput.getItems().size());
-
-            customerFirstLevelDivisionInput.getItems().remove(0, customerFirstLevelDivisionInput.getItems().size());
-
-            for (FirstLevelDivision D : finalAllDivisions) {
-
-                if (D.getCountryID() == finalAllCountries.get(index).getId()) {
-
-                            relevantDivisions.add(D);
-                            customerFirstLevelDivisionInput.getItems().add(D.getDivision());
-
-
-
-                }
-            }
-        });*/
 
         ObservableList<FirstLevelDivision> finalAllDivisions = allDivisions;
         customerCountryInput.setOnAction(ActionEvent -> {
@@ -85,6 +97,11 @@ public class AddCustomerController implements Initializable {
 
     }
 
+    /**
+     * Save New Customer Method -- adds the new customer to the database.
+     * @param actionEvent action event
+     * @throws SQLException SQL Exception
+     */
     // had a class cast exception here for FirstLevelDivision
     public void saveNewCustomer(ActionEvent actionEvent) throws SQLException {
         System.out.println(customerFirstLevelDivisionInput.getSelectionModel().getSelectedItem());
@@ -109,6 +126,10 @@ public class AddCustomerController implements Initializable {
         }
     }
 
+    /**
+     * Cancel Button's Method -- Discards all user input and sends user back to main dashboard.
+     * @param actionEvent Button Click action event
+     */
     public void cancelNewCustomer(ActionEvent actionEvent) {
         ButtonType B = Err.alertConfirm("Input will be discarded. Return to Dashboard?");
         if (B == ButtonType.YES) {

@@ -8,7 +8,16 @@ import javafx.stage.Stage;
 
 import java.sql.SQLException;
 
+/**
+ * Main Class -- this is the heart of the application and is required for every java program
+ */
 public class Main extends Application{
+
+    /**
+     * Start Method -- Required for every JavaFX Program
+     * @param stage Stage
+     * @throws Exception Exception
+     */
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/view/MainPage.fxml"));
@@ -17,13 +26,15 @@ public class Main extends Application{
         stage.show();
     }
 
+    /**
+     * Main Class -- this is the heart of the application and is required for every java program
+     * @param args args
+     * @throws SQLException SQL Exception
+     */
     public static void main(String[] args) throws SQLException {
         JDBC.openConnection();
         //Locale.setDefault(Locale.FRANCE);
         launch();
-
-
-
 
         JDBC.closeConnection();
     }

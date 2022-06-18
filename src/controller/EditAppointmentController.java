@@ -18,21 +18,83 @@ import java.time.*;
 import java.util.ResourceBundle;
 
 public class EditAppointmentController implements Initializable {
+
+    /**
+     * Appointment ID field -- Disabled auto-populated
+     */
     public TextField appointmentIDInput;
+
+    /**
+     * Appointment Title Input field
+     */
     public TextField appointmentTitleInput;
+
+    /**
+     * Appointment Description Field
+     */
     public TextField appointmentDescriptionInput;
+
+    /**
+     * Appointment Location Input field
+     */
     public TextField appointmentLocationInput;
+
+    /**
+     * Appointment Contact Input -- Auto-populated Dropdown
+     */
     public ComboBox<Contact> appointmentContactInput;
+
+    /**
+     * Appointment Type Input
+     */
     public TextField appointmentTypeInput;
+
+    /**
+     * Appointment Start Date Input -- Date Picker
+     */
     public DatePicker appointmentStartDateInput;
+
+    /**
+     * Appointment End Date Input -- Date Picker
+     */
     public DatePicker appointmentEndDateInput;
+
+    /**
+     * Save Button
+     */
     public Button saveNewAppointmentBTN;
+
+    /**
+     * Cancel Button
+     */
     public Button cancelNewAppointmentBTN;
+
+    /**
+     * Appointment Start Time Input -- auto-populated dropdown
+     */
     public ComboBox<LocalTime> appointmentStartTimeInput;
+
+    /**
+     * Appointment End Time Input -- auto-populated dropdown
+     */
     public ComboBox<LocalTime> appointmentEndTimeInput;
+
+    /**
+     * User ID input -- auto-populated dropdown list of users
+     */
     public ComboBox<User> appointmentUserIDInput;
+
+    /**
+     * Customer ID input -- auto-populated dropdown list of customers
+     */
     public ComboBox<Customer> appointmentCustomerIDInput;
 
+
+    /**
+     * Initialize Method -- prepares page for use -- auto-populates dropdowns
+     * @param url url
+     * @param resourceBundle resource bundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Appointment A = DashboardController.getAppointment();
@@ -56,9 +118,9 @@ public class EditAppointmentController implements Initializable {
         ObservableList<LocalTime> time = FXCollections.observableArrayList();
         for (int i = 0; i < 24; i++) {
             time.add(LocalTime.of(i,0));
-            //time.add(LocalTime.of(i,15));
-            //time.add(LocalTime.of(i,30));
-            //time.add(LocalTime.of(i,45));
+            time.add(LocalTime.of(i,15));
+            time.add(LocalTime.of(i,30));
+            time.add(LocalTime.of(i,45));
         }
 
         appointmentStartTimeInput.setItems(time);
@@ -66,9 +128,9 @@ public class EditAppointmentController implements Initializable {
         ObservableList<LocalTime> endTime = FXCollections.observableArrayList();
         for (int i = 1; i < 24; i++) {
             endTime.add(LocalTime.of(i,0));
-            //endTime.add(LocalTime.of(i,15));
-            //endTime.add(LocalTime.of(i,30));
-            //endTime.add(LocalTime.of(i,45));
+            endTime.add(LocalTime.of(i,15));
+            endTime.add(LocalTime.of(i,30));
+            endTime.add(LocalTime.of(i,45));
         }
         endTime.add(LocalTime.of(0,0));
         appointmentEndTimeInput.setItems(endTime);
@@ -86,6 +148,10 @@ public class EditAppointmentController implements Initializable {
 
     }
 
+    /**
+     * Save Method -- saves new appointment to the database
+     * @param actionEvent click
+     */
     public void saveModAppointment(ActionEvent actionEvent) {
         Appointment A = DashboardController.getAppointment();
         if (A == null) {A = AppointmentsController.getAppointment();}
@@ -159,6 +225,10 @@ public class EditAppointmentController implements Initializable {
 
     }
 
+    /**
+     * Cancel Method -- discards all user input and sends user back to main dashboard
+     * @param actionEvent click
+     */
     public void cancelModAppointment(ActionEvent actionEvent) {
         ButtonType B = Err.alertConfirm("All input will be discarded. Are you sure you want to go back to the home page?");
         if(B == ButtonType.YES) {

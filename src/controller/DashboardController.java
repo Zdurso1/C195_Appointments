@@ -21,41 +21,130 @@ import java.util.ResourceBundle;
 
 public class DashboardController implements Initializable {
 
+    /**
+     * Appointments table -- displays all appointments
+     */
     public TableView<Appointment> appointmentTable;
+
+    /**
+     * Appointment ID Column
+     */
     public TableColumn appointmentIDColumn;
+
+    /**
+     * Appointment Title Column
+     */
     public TableColumn appointmentTitleColumn;
+
+    /**
+     * Appointment Type Column
+     */
     public TableColumn appointmentTypeColumn;
+
+    /**
+     * Appointment Start Date Time Column
+     */
     public TableColumn appointmentStartColumn;
+
+    /**
+     * Appointment Table Label
+     */
     public Label appointmentTableLabel;
+
+    /**
+     * Add Appointment Button
+     */
     public Button appointmentAddBTN;
+
+    /**
+     * Update Appointment Button
+     */
     public Button appointmentUpdateBTN;
+
+    /**
+     * Delete Appointment Button
+     */
     public Button appointmentDeleteBTN;
+
+    /**
+     * Customer Table Label
+     */
     public Label customerTableLabel;
+
+    /**
+     * Customer Table -- displays all customers in database
+     */
     public TableView<Customer> customerTable;
+
+    /**
+     * Customer ID Column
+     */
     public TableColumn customerIDColumn;
+
+    /**
+     * Customer Name Column
+     */
     public TableColumn customerNameColumn;
+
+    /**
+     * Customer Phone Number Column
+     */
     public TableColumn customerPhoneColumn;
+
+    /**
+     * Customer Division ID Column
+     */
     public TableColumn customerDivisionIDColumn;
+
+    /**
+     * Add Customer Button
+     */
     public Button customerAddBTN;
+
+    /**
+     * Update Customer Record Button
+     */
     public Button customerUpdateBTN;
+
+    /**
+     * Delete Customer Button
+     */
     public Button customerDeleteBTN;
 
+    /**
+     * Selected Appointment for update or deletion -- also a getter for selected Appointment Record
+     */
     private static Appointment A = null;
     public static Appointment getAppointment() {return A;}
 
+    /**
+     * Selected Customer for update or deletion -- also getter for selected Customer Record
+     */
     private static Customer C = null;
     public static Customer getCustomer() {return C;}
 
 
-
+    /**
+     * List of All Appointments
+     */
     ObservableList<Appointment> allAppointments = FXCollections.observableArrayList(Query.getAllAppointments());
 
 
+    /**
+     * List of All Customers
+     */
     ObservableList<Customer> allCustomers = FXCollections.observableArrayList(Query.getAllCustomers());
 
 
+    /**
+     * Initialize Method -- Prepares page for view and use by customer
+     * @param url url
+     * @param resourceBundle resource bundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+
         appointmentTable.setItems(allAppointments);
         customerTable.setItems(allCustomers);
 
@@ -69,32 +158,20 @@ public class DashboardController implements Initializable {
         customerPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
         customerDivisionIDColumn.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
 
-        boolean within15 = false;
-        int withinID = 0;
-        ZonedDateTime withinZST = ZonedDateTime.now();
-        for (Appointment appointment : allAppointments) {
-            // does this need to be 16 minutes to be within the 15 minute timespan?
-
-            if (appointment.getUserID() == Query.getCurrentUser().getId()) {
-                if (appointment.getZst().isBefore(ZonedDateTime.now().plusMinutes(16)) && appointment.getZst().isAfter(ZonedDateTime.now())) {
-                    within15 = true;
-                    withinID = appointment.getId();
-                    withinZST = appointment.getZst();
-                }
-            }
-        }
-        if (within15) {
-            Err.alertOk("Better Hurry! Theres an appointment in the next 15 minutes.\nID: " + withinID + "\nStart: " + withinZST);
-        }else{
-            Err.alertOk("No appointments within 15 minutes.");
-        }
-
     }
 
+    /**
+     * Add appointment Method
+     * @param actionEvent click
+     */
     public void addAppointment(ActionEvent actionEvent) {
         LoadPage.toOther(appointmentAddBTN, "AddAppointment");
     }
 
+    /**
+     * Update Appointment Method -- sends user to Update Appointment Page if appointment to edit has been selected
+     * @param actionEvent click
+     */
     public void updateAppointment(ActionEvent actionEvent) {
         TableView.TableViewSelectionModel<Appointment> appointmentSelection = appointmentTable.getSelectionModel();
         appointmentSelection.setSelectionMode(SelectionMode.SINGLE);
@@ -107,6 +184,10 @@ public class DashboardController implements Initializable {
         }
     }
 
+    /**
+     * Delete Appointment Method -- Deletes appointment record if one has been selected first
+     * @param actionEvent click
+     */
     public void deleteAppointment(ActionEvent actionEvent) {
 
         TableView.TableViewSelectionModel<Appointment> appointmentSelection = appointmentTable.getSelectionModel();
@@ -126,10 +207,18 @@ public class DashboardController implements Initializable {
         }
     }
 
+    /**
+     * Add Customer Method -- sends user to Add Customer Page
+     * @param actionEvent Click
+     */
     public void addCustomer(ActionEvent actionEvent) {
         LoadPage.toOther(customerAddBTN, "AddCustomer");
     }
 
+    /**
+     * Update Customer Method -- Sends user to Update Customer Page
+     * @param actionEvent
+     */
     public void updateCustomer(ActionEvent actionEvent) {
         customerTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         Customer c = customerTable.getSelectionModel().getSelectedItem();
@@ -139,6 +228,10 @@ public class DashboardController implements Initializable {
 
     }
 
+    /**
+     * Delete Customer Method -- deletes customer record if one has been selected first
+     * @param actionEvent click
+     */
     public void deleteCustomer(ActionEvent actionEvent) {
 
         customerTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -175,6 +268,10 @@ public class DashboardController implements Initializable {
         } else {Err.alertOk("Some appointments must be deleted.");}
     }
 
+    /**
+     * View Filtered Method -- sends user to Appointments Page where different reports may be viewed
+     * @param actionEvent click
+     */
     public void viewFiltered(ActionEvent actionEvent) {
         LoadPage.toOther(appointmentAddBTN,"Appointments");
     }

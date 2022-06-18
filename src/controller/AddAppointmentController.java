@@ -22,22 +22,83 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class AddAppointmentController implements Initializable {
+    /**
+     * Appointment ID Field -- Disabled - Auto Generated
+     */
     public TextField appointmentIDInput;
+
+    /**
+     * Appointment Title Input Field
+     */
     @FXML
     public TextField appointmentTitleInput;
+
+    /**
+     * Appointment Description Input Field
+     */
     public TextField appointmentDescriptionInput;
+
+    /**
+     * Appointment Location Input Field
+     */
     public TextField appointmentLocationInput;
+
+    /**
+     * Dropdown list containing contacts to attach to new appointment record
+     */
     public ComboBox<Contact> appointmentContactInput;
+
+    /**
+     * Appointment Type Input Field
+     */
     public TextField appointmentTypeInput;
+
+    /**
+     * Appointment Start Date Input  --  Date Picker
+     */
     public DatePicker appointmentStartDateInput;
+
+    /**
+     * Appointment End Date Input  --  Date Picker
+     */
     public DatePicker appointmentEndDateInput;
+
+    /**
+     * Appointment Time Input -- Dropdown List containing choices
+     */
     public ComboBox<LocalTime> appointmentStartTimeInput;
+
+    /**
+     * Appointment End Time Input -- Dropdown List containing choices
+     */
     public ComboBox<LocalTime> appointmentEndTimeInput;
+
+    /**
+     * Customer Input -- Dropdown List of Customers
+     */
     public ComboBox<Customer> appointmentCustomerIDInput;
+
+    /**
+     * User Input -- Dropdown List of Users
+     */
     public ComboBox<User> appointmentUserIDInput;
+
+    /**
+     * Save Button -- saves new appointment to database
+     */
     public Button saveNewAppointmentBTN;
+
+    /**
+     * Cancel Button -- discards all user input and sends user back to main dashboard
+     */
     public Button cancelNewAppointmentBTN;
 
+
+    /**
+     * Initialize Method -- Prepares page for use
+     * @param url url
+     * @param resourceBundle resource bundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -58,9 +119,9 @@ public class AddAppointmentController implements Initializable {
         ObservableList<LocalTime> time = FXCollections.observableArrayList();
         for (int i = 0; i < 24; i++) {
             time.add(LocalTime.of(i,0));
-            //time.add(LocalTime.of(i,15));
-            //time.add(LocalTime.of(i,30));
-            //time.add(LocalTime.of(i,45));
+            time.add(LocalTime.of(i,15));
+            time.add(LocalTime.of(i,30));
+            time.add(LocalTime.of(i,45));
         }
 
         appointmentStartTimeInput.setItems(time);
@@ -68,15 +129,19 @@ public class AddAppointmentController implements Initializable {
         ObservableList<LocalTime> endTime = FXCollections.observableArrayList();
         for (int i = 1; i < 24; i++) {
             endTime.add(LocalTime.of(i,0));
-            //endTime.add(LocalTime.of(i,15));
-            //endTime.add(LocalTime.of(i,30));
-            //endTime.add(LocalTime.of(i,45));
+            endTime.add(LocalTime.of(i,15));
+            endTime.add(LocalTime.of(i,30));
+            endTime.add(LocalTime.of(i,45));
         }
         endTime.add(LocalTime.of(0,0));
         appointmentEndTimeInput.setItems(endTime);
 
     }
 
+    /**
+     * Save method -- saves new appointment to database
+     * @param actionEvent button click
+     */
     public void saveNewAppointment(ActionEvent actionEvent) {
         // Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By
         int overlappingID = 0;
@@ -144,6 +209,10 @@ public class AddAppointmentController implements Initializable {
         }
     }
 
+    /**
+     * Cancel Method -- Discards user input and sends user back to main dashboard.
+     * @param actionEvent button click
+     */
     public void cancelNewAppointment(ActionEvent actionEvent) {
         ButtonType B = Err.alertConfirm("All input will be discarded. Return to main page?");
         if (B == ButtonType.YES) { LoadPage.toDashboard(cancelNewAppointmentBTN); }

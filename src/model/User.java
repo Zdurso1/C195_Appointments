@@ -77,6 +77,10 @@ public class User {
         this.password = password;
     }
 
+    /**
+     * Overridden toString Method
+     * @return Returns User ID and User Name instead of location in memory
+     */
     @Override
     public String toString() {return "ID: " + id + " Name: " + name;}
 }

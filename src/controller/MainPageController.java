@@ -68,16 +68,17 @@ public class MainPageController implements Initializable {
 
 
     /**
-     * This is used to get locale and translate labels and whatnot.
+     * Resource Bundle -- This is used to get locale and translate labels and whatnot.
      * @param url url
      * @param resourceBundle resource bundle
      */
-
-    /**
-     * Resource Bundle
-     */
     ResourceBundle rb = ResourceBundle.getBundle("resources/MessageBundle", Locale.getDefault());
 
+    /**
+     * Initialize Method -- prepares page for use and viewing
+     * @param url url
+     * @param resourceBundle Resource Bundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -96,7 +97,11 @@ public class MainPageController implements Initializable {
 
     }
 
-
+    /**
+     * Login Method -- Validates user ID and password to allow user into the system.
+     * Then sends user to main dashboard if input was correct.
+     * @param actionEvent click
+     */
     public void login(ActionEvent actionEvent) {
         ObservableList<User> allUsers = Query.getAllUsers();
         boolean success = false;

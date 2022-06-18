@@ -78,7 +78,6 @@ public class Appointment {
      * @param userID User ID
      * @param contactID Contact ID
      */
-
     public Appointment(int id, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, int customerID, int userID, int contactID) {
         this.id = id;
         this.title = title;
