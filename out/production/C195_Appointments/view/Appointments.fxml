@@ -40,6 +40,6 @@
       <ComboBox fx:id="eachMonthComboInput" layoutX="450.0" layoutY="14.0" onAction="#monthSelected" prefHeight="25.0" prefWidth="124.0" promptText="Each Month" />
       <ComboBox fx:id="byTypeComboInput" layoutX="604.0" layoutY="14.0" onAction="#byType" prefHeight="25.0" prefWidth="117.0" promptText="View By Type" />
        <ComboBox fx:id="byContactComboInput" layoutX="750.0" layoutY="14.0" onAction="#byContact" prefWidth="150.0" promptText="View By Contact" />
-       <DialogPane fx:id="dialogPane" layoutX="270.0" layoutY="433.0" prefHeight="150.0" prefWidth="360.0" />
+       <DialogPane fx:id="dialogPane" layoutX="74.0" layoutY="433.0" prefHeight="53.0" prefWidth="740.0" />
    </children>
 </AnchorPane>
