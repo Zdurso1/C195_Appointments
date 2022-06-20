@@ -152,3 +152,75 @@ Somebody tried logging in with an id of: 3
 Attempt Success: true
 Timestamp: 2022-06-18T17:26:11.165469200 UTC
 
+Somebody tried logging in with an id of: 3
+Attempt Success: true
+Timestamp: 2022-06-20T17:05:02.838698100 UTC
+
+Somebody tried logging in with an id of: 3
+Attempt Success: true
+Timestamp: 2022-06-20T17:10:09.119015900 UTC
+
+Somebody tried logging in with an id of: 3
+Attempt Success: true
+Timestamp: 2022-06-20T17:12:56.624391500 UTC
+
+Somebody tried logging in with an id of: 3
+Attempt Success: true
+Timestamp: 2022-06-20T17:14:46.450710600 UTC
+
+Somebody tried logging in with an id of: 3
+Attempt Success: true
+Timestamp: 2022-06-20T17:52:45.795926900 UTC
+
+Somebody tried logging in with an id of: 3
+Attempt Success: true
+Timestamp: 2022-06-20T17:55:32.364496300 UTC
+
+Somebody tried logging in with an id of: 3
+Attempt Success: true
+Timestamp: 2022-06-20T17:56:39.964746200 UTC
+
+Somebody tried logging in with an id of: 3
+Attempt Success: true
+Timestamp: 2022-06-20T18:04:52.047894600 UTC
+
+Somebody tried logging in with an id of: 3
+Attempt Success: true
+Timestamp: 2022-06-20T18:06:52.888417500 UTC
+
+Somebody tried logging in with an id of: 3
+Attempt Success: true
+Timestamp: 2022-06-20T18:09:12.334373600 UTC
+
+Somebody tried logging in with an id of: 3
+Attempt Success: true
+Timestamp: 2022-06-20T18:10:22.753644600 UTC
+
+Somebody tried logging in with an id of: 3
+Attempt Success: true
+Timestamp: 2022-06-20T18:12:00.817487200 UTC
+
+Somebody tried logging in with an id of: 3
+Attempt Success: true
+Timestamp: 2022-06-20T18:12:53.382671 UTC
+
+Somebody tried logging in with an id of: 3
+Attempt Success: true
+Timestamp: 2022-06-20T18:13:35.746749200 UTC
+
+Somebody tried logging in with an id of: 3
+Attempt Success: true
+Timestamp: 2022-06-20T18:14:35.352726300 UTC
+
+Somebody tried logging in with an id of: 3
+Attempt Success: true
+Timestamp: 2022-06-20T18:15:20.972168900 UTC
+
+Somebody tried logging in with an id of: 3
+Attempt Success: true
+Timestamp: 2022-06-20T18:16:08.570545100 UTC
+
+Somebody tried logging in with an id of: 3
+Attempt Success: true
+Timestamp: 2022-06-20T18:17:35.469461400 UTC
+

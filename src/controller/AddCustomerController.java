@@ -86,6 +86,7 @@ public class AddCustomerController implements Initializable {
 
         ObservableList<FirstLevelDivision> finalAllDivisions = allDivisions;
         customerCountryInput.setOnAction(ActionEvent -> {
+            relevantDivisions.remove(0,relevantDivisions.size());
             for (FirstLevelDivision F : finalAllDivisions) {
                 if (F.getCountryID() == customerCountryInput.getValue().getId()) {
                     relevantDivisions.add(F);

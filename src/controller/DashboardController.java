@@ -197,7 +197,7 @@ public class DashboardController implements Initializable {
         if (A == null) {
             Err.alertOk("Must select an Appointment to Delete.");
         } else {
-            ButtonType B = Err.alertConfirm("Are you sure you want to Delete this Appointment?");
+            ButtonType B = Err.alertConfirm("Are you sure you want to Delete this Appointment?\nAppointment of type: " + A.getType());
             if (B == ButtonType.YES) {
                 allAppointments.remove(A);
                 Query.deleteAppointment(A.getId());
@@ -217,7 +217,7 @@ public class DashboardController implements Initializable {
 
     /**
      * Update Customer Method -- Sends user to Update Customer Page
-     * @param actionEvent
+     * @param actionEvent click
      */
     public void updateCustomer(ActionEvent actionEvent) {
         customerTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);

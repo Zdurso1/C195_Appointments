@@ -23,6 +23,8 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class AppointmentsController implements Initializable {
 
@@ -299,7 +301,7 @@ public class AppointmentsController implements Initializable {
 
     /**
      * Delete Method -- deletes appointment record if one has been selected
-     * @param actionEvent
+     * @param actionEvent click
      */
     public void delete(ActionEvent actionEvent) {
 
@@ -310,7 +312,7 @@ public class AppointmentsController implements Initializable {
         if (A == null) {
             Err.alertOk("Must select an Appointment to Modify");
         }else{
-            ButtonType B = Err.alertConfirm("Are you sure you want to delete this appointment?");
+            ButtonType B = Err.alertConfirm("Are you sure you want to delete this appointment?\nAppointment of type: " + A.getType());
             if (B == ButtonType.YES) {
                 allAppointments.remove(A);
                 filteredAppointments.remove(A);
@@ -387,13 +389,17 @@ public class AppointmentsController implements Initializable {
     public void monthSelected(ActionEvent actionEvent) {
         Month selectedMonth = eachMonthComboInput.getValue();
         System.out.println("Selected Month: "+selectedMonth);
-
+        ObservableList<String> allTypes = FXCollections.observableArrayList();
         for (Appointment a : allAppointments) {
             filteredAppointments.remove(a);
-            if(a.getStart().getMonth().equals(selectedMonth)){filteredAppointments.add(a);}
+            if(a.getStart().getMonth().equals(selectedMonth)){filteredAppointments.add(a);allTypes.add(a.getType());}
         }
         appointmentsTable.setItems(filteredAppointments);
-        dialogPane.setContentText("Number of appointments for this month: " + filteredAppointments.size());
+
+        Map<String, Long> typeCount = allTypes.stream().collect(Collectors.toMap(Function.identity(), V -> 1L, Long::sum));
+        String dp = "Total this month: " + filteredAppointments.size() +" Counts by type: "+ typeCount;
+        dialogPane.setContentText(dp);
+
 
     }
 }
